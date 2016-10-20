@@ -1,4 +1,4 @@
-function [ t, t_max, iter, u ] = simple_iter_method_func( A, f, epsilon, u, t )
+function [ t, t_max, k, u ] = simple_iter_method_func( A, f, epsilon, u, t )
 
     u_sol = A \ f;
     A_new = A' * A;
@@ -7,21 +7,15 @@ function [ t, t_max, iter, u ] = simple_iter_method_func( A, f, epsilon, u, t )
     last_elem = length(e);
     
     if nargin < 5 || isempty(t)
-       
         t = 2 / (e(1) + e(last_elem));
-        
     end;
 
     t_max = 2 / e(last_elem);
     
-    E = eye(size(A)(1));
-    for iter = 1:100000
-        if abs(norm(u - u_sol)) <= epsilon
-            return;
-        end;
+    E = eye(size(A));
+    k = 0;
+    while abs(norm(u - u_sol)) > epsilon
         u = (E - t * A_new) * u + t * f_new;
+        k = k + 1;
     end;
-
-    u = NaN;
-    error('Too many iterations');
 end
