@@ -23,12 +23,12 @@ function [ sol, iter ] = Newton ( func, dfunc, acc, x0, a, b, max_num_iter, mult
         iter = i;
         
         % Check d=0;
-        if abs ( feval(dfunc,x) ) < eps
+        if abs ( dfunc(x) ) < eps
             newx = ( interval(1) + interval(2) ) / 2.0;
             dx = newx - x;
             x = newx;
         else
-            dx = -feval(func,x) / feval(dfunc,x) * multiplicity;
+            dx = -func(x) / dfunc(x) * multiplicity;
             x = x + dx;
         end
         
@@ -42,13 +42,13 @@ function [ sol, iter ] = Newton ( func, dfunc, acc, x0, a, b, max_num_iter, mult
         history(2) = x;
         
         % Update interval.
-        if ( feval(dfunc,x) > 0 ) && ( feval(func,x) < 0 )
+        if ( dfunc(x) > 0 ) && ( func(x) < 0 )
             interval(1) = x;
-        elseif ( feval(dfunc,x) > 0 ) && ( feval(func,x) > 0 )
+        elseif ( dfunc(x) > 0 ) && ( func(x) > 0 )
             interval(2) = x;
-        elseif ( feval(dfunc,x) < 0 ) && ( feval(func,x) < 0 )
+        elseif ( dfunc(x) < 0 ) && ( func(x) < 0 )
             interval(2) = x;
-        elseif ( feval(dfunc,x) < 0 ) && ( feval(func,x) > 0 )
+        elseif (dfunc(x) < 0 ) && ( func(x) > 0 )
             interval(1) = x;
         end
         
